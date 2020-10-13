@@ -14,6 +14,10 @@ import { CheckedOutBooksHistoryComponent } from './checked-out-history/checked-o
     CommonModule,
     CheckedOutRoutingModule,
     LibraryMatModule
+  ],
+  exports: [
+    CheckedOutBooksComponent,
+    CheckedOutBooksHistoryComponent,
   ]
 })
 export class CheckedOutModule { }

@@ -5,7 +5,7 @@ import { Component, OnInit, HostBinding } from '@angular/core';
 import { Observable } from 'rxjs';
 import { ActivatedRoute, ParamMap } from '@angular/router';
 import { Member } from '../interfaces/member';
-import { switchMap, tap } from 'rxjs/operators';
+import { map, switchMap, tap } from 'rxjs/operators';
 import { AuthService } from '../../services/auth.service';
 import { MemberBook } from '../interfaces/member-book';
 
@@ -53,6 +53,14 @@ export class MemberDetailsComponent implements OnInit {
           this.firstName = m.fullName.split(' ')[0];
           this.lastName = m.fullName.split(' ')[1];
           this.postalCode = m.postalCode;
+
+          this.signedout$ = this.service.getSignedOutBooks(m).pipe(
+            map(books => books.map(book => Object.assign(new MemberBook(), book)))
+          );
+
+          this.bookhistory$ = this.service.getMemberBookHistory(m).pipe(
+            map(books => books.map(book => Object.assign(new MemberBook(), book)))
+          );
         })
       );
   }
