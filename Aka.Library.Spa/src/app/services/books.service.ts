@@ -53,8 +53,19 @@ export class BooksService {
    * @memberof BooksService
    */
   getTotalNumberOfCopiesInLibrary(libraryId: number, bookId: number): Observable<number> {
-    // TODO: Add implementation
-    return of(0);
+
+    const url = `${this.apiUrl}${libraryId}/books`;
+    return this.http.get<LibraryBook[]>(url)
+      .pipe(
+        map(items => items.filter(item => item.book.bookId == bookId)),
+        map(books => {
+          if (books && books.length){
+            return books[0].totalPurchasedByLibrary;
+          } else {
+            return 0;
+          }
+        })
+      );
   }
 
   /**
@@ -67,8 +78,10 @@ export class BooksService {
    * @memberof BooksService
    */
   getNumberOfAvailableBookCopies(libraryId: number, bookId: number): Observable<number> {
-    // TODO: Add implementation
-    return throwError('Not Implemented');
+    return this.getAvailableBooks(libraryId).pipe(
+      map(books => books.filter(book => book.bookId == bookId)),
+      map(books => books.length)
+    )
   }
 
   checkOutBook(libraryId: number, bookId: number, memberId: number): Observable<SignedOutBook> {
