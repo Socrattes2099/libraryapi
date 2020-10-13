@@ -15,3 +15,23 @@
     <p>The maximum number of books you can check out is 2. You have currently checked out: {{numBooksSignedOut}}</p>
   </div>
 </section>
+
+<div>
+  <h3>Google Books metadata</h3>
+  <dl *ngIf="bookMetadata; else noMetaDataFound">
+    <dt>Description</dt>
+    <dd>{{bookMetadata.description}}</dd>
+
+    <dt>Authors</dt>
+    <dd>
+      <span *ngFor="let author of bookMetadata.authors">{{author}}, </span>
+    </dd>
+
+    <dt>Image</dt>
+    <dd><img [src]="bookMetadata.imageLinks.smallThumbnail" /></dd>
+  </dl>
+
+  <ng-template  #noMetaDataFound>
+    <div>No Google Metadata found for isbn {{book.isbn}}</div>
+  </ng-template>
+</div>

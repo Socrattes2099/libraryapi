@@ -8,7 +8,7 @@ import { GoogleBooksMetadata } from '../shared/google-books-metadata';
 import { Observable } from 'rxjs/internal/Observable';
 import { throwError } from 'rxjs/internal/observable/throwError';
 import { of } from 'rxjs/internal/observable/of';
-import { map } from 'rxjs/operators';
+import { filter, map } from 'rxjs/operators';
 
 @Injectable()
 export class BooksService {
@@ -103,12 +103,12 @@ export class BooksService {
    * @memberof BooksService
    */
   getBookMetaData(isbn: string): Observable<GoogleBooksMetadata> {
-    // TODO: Add implementation
-    const url = `https://www.googleapis.com/books/v1/volumes?q=isbn:${isbn}&key=${this.googleBooksAPIKey}`;
+    const url = `https://www.googleapis.com/books/v1/volumes?q=isbn${isbn}&key=${this.googleBooksAPIKey}`;
 
-    // return this.http.get(url);
-    return throwError('Funtion not implemented');
-
+    return this.http.get<any>(url).pipe(
+      filter(items => items.totalItems > 0),
+      map(items => items.items[0].volumeInfo)
+    );
   }
 
 }
